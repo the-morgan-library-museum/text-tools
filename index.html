@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+	<title>Text Tools</title>
+
+	<!-- JQuery -->
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	
+	<!-- Font Awesome -->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/fontawesome.min.css" rel="stylesheet" />
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/solid.min.css" rel="stylesheet" />
+
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.2/css/bootstrap.min.css"  type="text/css"/>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.2/js/bootstrap.bundle.min.js"></script>
+	
+	<!-- Clipboard.js -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+	
+	<script type="text/javascript" language="JavaScript">
+		$(document).ready(function() {
+
+			//Initialize
+			$("[data-toggle='tooltip']").tooltip();
+			$("#sourcetext").focus();
+			
+			$("#transform").click(function(){
+				var $sourcetext = $("#sourcetext").val();
+				
+				if ($sourcetext != "") {
+					transformer($sourcetext);
+				} else {
+					$("#sourcetext").focus();
+				}
+				
+				setTimeout(function() {
+					$("#transform").tooltip('hide');
+				}, 500);
+				
+			});
+			
+			var clipboard = new ClipboardJS('[data-clipboard-target]');
+			
+			clipboard.on('success', function(e) {
+				setToolTip(e.trigger, 'Copied!');
+			});
+
+			clipboard.on('error', function(e) {
+				setToolTip(e.trigger, 'Copy with Ctrl-c');
+			});
+			
+	
+		});
+
+		var transformer = function(text){
+			$('[data-transform-append]').val('');
+			if (text) {
+				$('[data-transform-append]').each(function(){
+					var append = $(this).attr('data-transform-append');
+					var transformed = Array.from(text).reduce((r, a) => r.concat(a, String.fromCodePoint.apply(null, [append])), []).join("");
+					$(this).val(transformed);
+				});
+			}
+		};
+		
+		// Handler for updating the tooltip message.
+		var setToolTip = function (btn, message) {
+			$(btn).attr('data-original-title', message)
+				.tooltip('show')
+				.attr('data-original-title', "Copy to Clipboard");
+			setTimeout(function() {
+				$(btn).tooltip('hide');
+			}, 1000);
+		};
+	
+	</script>
+	
+	<style>
+		input{
+			font-family:'Arial Unicode MS', 'Arial';    
+		}
+	</style>
+</head>
+<body class="bg-light" style="margin-top: 10%;">
+
+<div class="container">
+	<div class="row justify-content-center" >
+		<div class="col-md-8"> 
+			<div class="card">
+				<div class="card-header h4 text-white bg-primary mx-0">
+					Text Tools
+				</div>
+				<div class="card-body">
+					<label for="sourcetext">Text to be transformed</label>
+					<div class="input-group mb-4">
+						<input id="sourcetext" type="text" class="form-control" placeholder="Enter your text here">
+						<button id="transform" class="btn btn-success" type="button" data-toggle="tooltip" data-placement="bottom" title="Transform Text">
+							<i class="fa-solid fa-wand-magic-sparkles fa-lg fa-fw"></i>
+						</button>
+					</div>
+					<hr class="mx0"/>
+						<label for="u1">Underline (double macron)</label>
+						<div class="input-group mb-3">
+							<input id="u1" type="text" class="form-control" data-transform-append=863 readonly>
+							<button class="btn btn-dark" type="button" data-clipboard-target="#u1" data-toggle="tooltip" data-placement="bottom" title="Copy to Clipboard">
+								<i class="fa-solid fa-clipboard fa-lg fa-fw"></i>
+							</button>
+						</div>
+						
+						<label for="u2">Underline (low line)</label>
+						<div class="input-group mb-3">
+							<input id="u2" type="text" class="form-control" data-transform-append=818 readonly>
+							<button class="btn btn-dark" type="button" data-clipboard-target="#u2" data-toggle="tooltip" data-placement="bottom" title="Copy to Clipboard">
+								<i class="fa-solid fa-clipboard fa-lg fa-fw"></i>
+							</button>
+						</div>
+						
+						<label for="u3">Double underline</label>
+						<div class="input-group mb-3">
+							<input id="u3" type="text" class="form-control" data-transform-append=819 readonly>
+							<button class="btn btn-dark" type="button" data-clipboard-target="#u3" data-toggle="tooltip" data-placement="bottom" title="Copy to Clipboard">
+								<i class="fa-solid fa-clipboard fa-lg fa-fw"></i>
+							</button>
+						</div>
+						
+						<label for="s1">Short strikethrough</label>
+						<div class="input-group mb-3">
+							<input id="s1" type="text" class="form-control" data-transform-append=821 readonly>
+							<button class="btn btn-dark" type="button" data-clipboard-target="#s1" data-toggle="tooltip" data-placement="bottom" title="Copy to Clipboard">
+								<i class="fa-regular fa-clipboard fa-lg fa-fw"></i>
+							</button>
+						</div>
+
+						<label for="s2">Long strikethrough</label>
+						<div class="input-group mb-3">
+							<input id="s2" type="text" class="form-control" data-transform-append=822 readonly>
+							<button class="btn btn-dark" type="button" data-clipboard-target="#s2" data-toggle="tooltip" data-placement="bottom" title="Copy to Clipboard">
+								<i class="fa-regular fa-clipboard fa-lg fa-fw"></i>
+							</button>
+						</div>
+
+						<!--<label for="f1">Short strikethrough</label>
+						<div class="input-group mb-3">
+							<input id="f1" type="text" class="form-control" data-transform-append=831 readonly>
+							<button class="btn btn-dark" type="button" data-clipboard-target="#f1" data-toggle="tooltip" data-placement="bottom" title="Copy to Clipboard">
+								<i class="fal fa-clipboard fa-lg fa-fw"></i>
+							</button>
+						</div>-->
+						
+					</div>					
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+</body>
+</html>
